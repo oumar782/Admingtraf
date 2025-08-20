@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
-import './dashboard.css';
+import '../style/Dashboard.css';
 
 // Storage key
 const STORAGE_KEY = 'gtraf_dashboard_v1';
