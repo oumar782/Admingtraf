@@ -326,8 +326,8 @@ const RecentActivity = () => {
 
       try {
         const [devisRes, reservationsRes] = await Promise.all([
-          fetch('http://localhost:5000/api/contact?limit=5&sortBy=date_creation&order=DESC'),
-          fetch('http://localhost:5000/api/reservation?limit=5&sortBy=date_heure_depart&order=DESC')
+          fetch('https://gtrafplusbac.vercel.app/api/contact?limit=5&sortBy=date_creation&order=DESC'),
+          fetch('https://gtrafplusbac.vercel.app/api/reservation?limit=5&sortBy=date_heure_depart&order=DESC')
         ]);
 
         if (!devisRes.ok) throw new Error('Échec du chargement des devis');
