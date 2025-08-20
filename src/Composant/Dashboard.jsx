@@ -224,9 +224,9 @@ const HomeTab = ({ data, searchTerm, formatDate }) => {
       try {
         // Récupérer les stats en parallèle
         const [devisRes, reservationsRes, portfolioRes] = await Promise.all([
-          axios.get('http://localhost:5000/api/contact/count'),
-          axios.get('http://localhost:5000/api/reservation/count'),
-          axios.get('http://localhost:5000/api/portfolio/count')
+          axios.get('https://gtrafplusbac.vercel.app/api/contact/count'),
+          axios.get('https://gtrafplusbac.vercel.app/api/reservation/count'),
+          axios.get('https://gtrafplusbac.vercel.app/api/portfolio/count')
         ]);
 
         setStats({
