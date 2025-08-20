@@ -423,7 +423,7 @@ const RecentActivity = () => {
 };
 
 const DevisTab = ({ showToast, modal, openModal, closeModal, searchTerm, sortConfig, handleSort, exportDevisCSV, setConfirmDialog }) => {
-  const API_URL = 'http://localhost:5000/api/contact';
+  const API_URL = 'https://gtrafplusbac.vercel.app/api/contact';
 
   const [data, setData] = useState({ devis: [] });
   const [loading, setLoading] = useState(true);
@@ -821,7 +821,7 @@ const DevisTab = ({ showToast, modal, openModal, closeModal, searchTerm, sortCon
     calcCarPrice,
     formatDate
   }) => {
-    const API_URL = 'http://localhost:5000/api/reservation';
+    const API_URL = 'https://gtrafplusbac.vercel.app/api/reservation';
 
     const [data, setData] = useState({ reservations: [] });
     const [loading, setLoading] = useState(true);
