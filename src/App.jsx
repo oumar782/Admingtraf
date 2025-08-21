@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Dashboard from '../src/Composant/Dashboard';
-import Authentification from '../src/Composant/Authentification';
+import Dashboard from './Composant/Dashboard';
+import Authentification from './Composant/Authentification';
 
 function App() {
   return (
