@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../style/Authentification.css';
 import Logo from '../assets/gt.webp';
 
-// Composant Toast pour afficher les messages de notification
-const Toast = ({ message, type, onClose }) => {
+const AuthToast = ({ message, type, onClose }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       onClose();
@@ -12,14 +12,14 @@ const Toast = ({ message, type, onClose }) => {
   }, [onClose]);
 
   return (
-    <div className={`toast toast-${type}`}>
-      <div className="toast-message">{message}</div>
-      <button className="toast-close" onClick={onClose}>×</button>
+    <div className={`auth-toast auth-toast-${type}`}>
+      <div className="auth-toast-message">{message}</div>
+      <button className="auth-toast-close" onClick={onClose}>×</button>
     </div>
   );
 };
 
-const Authentification = ({ onLogin }) => {
+const Authentification = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -27,27 +27,27 @@ const Authentification = ({ onLogin }) => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [toast, setToast] = useState(null);
-  const [redirectToDashboard, setRedirectToDashboard] = useState(false);
+  const navigate = useNavigate();
 
-  // Fonction pour afficher les toasts
+  // Vérifier si l'utilisateur est déjà connecté
+  useEffect(() => {
+    const isAuthenticated = localStorage.getItem('isAuthenticated');
+    const authToken = localStorage.getItem('authToken');
+    
+    if (isAuthenticated && authToken) {
+      navigate('/dashboard');
+    }
+  }, [navigate]);
+
   const showToast = (message, type = 'info') => {
     setToast({ message, type });
   };
-
-  // Redirection vers le dashboard
-  useEffect(() => {
-    if (redirectToDashboard) {
-      // Utilisation de window.location pour une redirection garantie
-      window.location.href = '/dashboard';
-    }
-  }, [redirectToDashboard]);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
-    // Effacer l'erreur du champ modifié
     if (errors[e.target.name]) {
       setErrors({
         ...errors,
@@ -86,7 +86,6 @@ const Authentification = ({ onLogin }) => {
     setIsLoading(true);
     
     try {
-      // Utiliser l'endpoint de login de l'API
       const response = await fetch('https://gtrafplusbac.vercel.app/api/user/login', {
         method: 'POST',
         headers: {
@@ -107,22 +106,13 @@ const Authentification = ({ onLogin }) => {
       // Stocker les informations utilisateur
       localStorage.setItem('user', JSON.stringify(data.user));
       localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('authToken', data.token || Date.now().toString());
       
-      // Utiliser 'authToken' au lieu de 'token' pour la cohérence
-      const authToken = data.token || Date.now().toString();
-      localStorage.setItem('authToken', authToken);
-      
-      // Afficher le toast de succès
       showToast('Connexion réussie ! Redirection en cours...', 'success');
       
-      // Appeler la fonction onLogin passée en prop
-      if (onLogin) {
-        onLogin(authToken);
-      }
-      
-      // Déclencher la redirection
+      // Redirection avec React Router
       setTimeout(() => {
-        setRedirectToDashboard(true);
+        navigate('/dashboard');
       }, 1500);
       
     } catch (error) {
@@ -135,29 +125,28 @@ const Authentification = ({ onLogin }) => {
   };
 
   return (
-    <div className="auth-container">
-      {/* Affichage du toast */}
+    <div className="auth-page-container">
       {toast && (
-        <Toast 
+        <AuthToast 
           message={toast.message} 
           type={toast.type} 
           onClose={() => setToast(null)} 
         />
       )}
       
-      <div className="auth-card">
-        <div className="auth-header">
-          <div className="logo-container">
-            <img src={Logo} alt="G-TRAF+ Logo" className="logo" />
+      <div className="auth-page-card">
+        <div className="auth-page-header">
+          <div className="auth-page-logo-container">
+            <img src={Logo} alt="G-TRAF+ Logo" className="auth-page-logo" />
             <h1>G-TRAF+</h1>
           </div>
-          <p className="company-description">
+          <p className="auth-page-description">
             Solutions pour les Guinéens en matière des travaux BTP et fournitures.
           </p>
         </div>
 
-        <form className="auth-form" onSubmit={handleSubmit}>
-          <div className="form-group">
+        <form className="auth-page-form" onSubmit={handleSubmit}>
+          <div className="auth-form-group">
             <label htmlFor="email">Email</label>
             <input
               type="email"
@@ -165,14 +154,14 @@ const Authentification = ({ onLogin }) => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className={errors.email ? 'error' : ''}
+              className={errors.email ? 'auth-input-error' : ''}
               placeholder="Entrez votre email"
               disabled={isLoading}
             />
-            {errors.email && <span className="error-message">{errors.email}</span>}
+            {errors.email && <span className="auth-error-message">{errors.email}</span>}
           </div>
 
-          <div className="form-group">
+          <div className="auth-form-group">
             <label htmlFor="password">Mot de passe</label>
             <input
               type="password"
@@ -180,25 +169,25 @@ const Authentification = ({ onLogin }) => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className={errors.password ? 'error' : ''}
+              className={errors.password ? 'auth-input-error' : ''}
               placeholder="Entrez votre mot de passe"
               disabled={isLoading}
             />
-            {errors.password && <span className="error-message">{errors.password}</span>}
+            {errors.password && <span className="auth-error-message">{errors.password}</span>}
           </div>
 
-          {errors.submit && <div className="error-message submit-error">{errors.submit}</div>}
+          {errors.submit && <div className="auth-error-message auth-submit-error">{errors.submit}</div>}
 
           <button 
             type="submit" 
-            className="submit-btn"
+            className="auth-submit-btn"
             disabled={isLoading}
           >
             {isLoading ? 'Connexion...' : 'Se connecter'}
           </button>
         </form>
 
-        <div className="auth-footer">
+        <div className="auth-page-footer">
           <p>© 2025 G-TRAF+. Tous droits réservés.</p>
         </div>
       </div>
