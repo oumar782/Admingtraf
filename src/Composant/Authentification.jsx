@@ -3,7 +3,7 @@ import '../style/Authentification.css';
 import Logo from '../assets/gt.webp';
 
 // Composant Toast pour afficher les messages de notification
-const AuthToast = ({ message, type, onClose }) => {
+const Toast = ({ message, type, onClose }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       onClose();
@@ -12,9 +12,9 @@ const AuthToast = ({ message, type, onClose }) => {
   }, [onClose]);
 
   return (
-    <div className={`auth-toast auth-toast-${type}`}>
-      <div className="auth-toast-message">{message}</div>
-      <button className="auth-toast-close" onClick={onClose}>×</button>
+    <div className={`toast toast-${type}`}>
+      <div className="toast-message">{message}</div>
+      <button className="toast-close" onClick={onClose}>×</button>
     </div>
   );
 };
@@ -135,29 +135,29 @@ const Authentification = ({ onLogin }) => {
   };
 
   return (
-    <div className="auth-page-container">
+    <div className="auth-container">
       {/* Affichage du toast */}
       {toast && (
-        <AuthToast 
+        <Toast 
           message={toast.message} 
           type={toast.type} 
           onClose={() => setToast(null)} 
         />
       )}
       
-      <div className="auth-page-card">
-        <div className="auth-page-header">
-          <div className="auth-page-logo-container">
-            <img src={Logo} alt="G-TRAF+ Logo" className="auth-page-logo" />
+      <div className="auth-card">
+        <div className="auth-header">
+          <div className="logo-container">
+            <img src={Logo} alt="G-TRAF+ Logo" className="logo" />
             <h1>G-TRAF+</h1>
           </div>
-          <p className="auth-page-description">
+          <p className="company-description">
             Solutions pour les Guinéens en matière des travaux BTP et fournitures.
           </p>
         </div>
 
-        <form className="auth-page-form" onSubmit={handleSubmit}>
-          <div className="auth-form-group">
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
               type="email"
@@ -165,14 +165,14 @@ const Authentification = ({ onLogin }) => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className={errors.email ? 'auth-input-error' : ''}
+              className={errors.email ? 'error' : ''}
               placeholder="Entrez votre email"
               disabled={isLoading}
             />
-            {errors.email && <span className="auth-error-message">{errors.email}</span>}
+            {errors.email && <span className="error-message">{errors.email}</span>}
           </div>
 
-          <div className="auth-form-group">
+          <div className="form-group">
             <label htmlFor="password">Mot de passe</label>
             <input
               type="password"
@@ -180,25 +180,25 @@ const Authentification = ({ onLogin }) => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className={errors.password ? 'auth-input-error' : ''}
+              className={errors.password ? 'error' : ''}
               placeholder="Entrez votre mot de passe"
               disabled={isLoading}
             />
-            {errors.password && <span className="auth-error-message">{errors.password}</span>}
+            {errors.password && <span className="error-message">{errors.password}</span>}
           </div>
 
-          {errors.submit && <div className="auth-error-message auth-submit-error">{errors.submit}</div>}
+          {errors.submit && <div className="error-message submit-error">{errors.submit}</div>}
 
           <button 
             type="submit" 
-            className="auth-submit-btn"
+            className="submit-btn"
             disabled={isLoading}
           >
             {isLoading ? 'Connexion...' : 'Se connecter'}
           </button>
         </form>
 
-        <div className="auth-page-footer">
+        <div className="auth-footer">
           <p>© 2025 G-TRAF+. Tous droits réservés.</p>
         </div>
       </div>
